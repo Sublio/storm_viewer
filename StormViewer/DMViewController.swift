@@ -23,6 +23,7 @@ class DMViewController: UITableViewController {
                 pictures.append(item)
             }
         }
+        pictures = pictures.sorted { $0 < $1 }
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
     }
@@ -42,6 +43,8 @@ class DMViewController: UITableViewController {
 
         if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
             vc.selectedImage = pictures[indexPath.row]
+            vc.selectedPictureIndex = indexPath.row + 1
+            vc.totalImageAmount = pictures.count
             navigationController?.pushViewController(vc, animated: true)
         }
     }
