@@ -26,6 +26,7 @@ class DMViewController: UITableViewController {
         pictures = pictures.sorted { $0 < $1 }
         title = "Storm Viewer"
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(showRecommendApp))
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -47,6 +48,16 @@ class DMViewController: UITableViewController {
             vc.totalImageAmount = pictures.count
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    @objc func showRecommendApp(){
+        let string = "Try this cool app"
+        let objectToShare = URL(string: "www.google.com")
+        let sharedObjects:[AnyObject] = [objectToShare as AnyObject,string as AnyObject]
+        let vc = UIActivityViewController(activityItems: sharedObjects, applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        vc.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail]
+        present(vc, animated: true)
     }
 
 }
