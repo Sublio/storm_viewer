@@ -14,9 +14,17 @@ class DMViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let fm = FileManager.default
+
+        title = "Storm Viewer"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(showRecommendApp))
+        performSelector(inBackground: #selector(loadPictures), with: nil)
+    }
+
+    @objc func loadPictures() {
+        let fileManager = FileManager.default
         let path = Bundle.main.resourcePath!
-        let items = try! fm.contentsOfDirectory(atPath: path)
+        let items = try! fileManager.contentsOfDirectory(atPath: path)
 
         for item in items {
             if item.hasPrefix("nssl") {
@@ -24,9 +32,6 @@ class DMViewController: UITableViewController {
             }
         }
         pictures = pictures.sorted { $0 < $1 }
-        title = "Storm Viewer"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(showRecommendApp))
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -49,14 +54,14 @@ class DMViewController: UITableViewController {
             navigationController?.pushViewController(vc, animated: true)
         }
     }
-    
-    @objc func showRecommendApp(){
+
+    @objc func showRecommendApp() {
         let string = "Try this cool app"
         let objectToShare = URL(string: "www.google.com")
-        let sharedObjects:[AnyObject] = [objectToShare as AnyObject,string as AnyObject]
+        let sharedObjects: [AnyObject] = [objectToShare as AnyObject, string as AnyObject]
         let vc = UIActivityViewController(activityItems: sharedObjects, applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
-        vc.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook,UIActivity.ActivityType.postToTwitter,UIActivity.ActivityType.mail]
+        vc.excludedActivityTypes = [ UIActivity.ActivityType.airDrop, UIActivity.ActivityType.postToFacebook, UIActivity.ActivityType.postToTwitter, UIActivity.ActivityType.mail]
         present(vc, animated: true)
     }
 
